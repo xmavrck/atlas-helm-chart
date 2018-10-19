@@ -15,3 +15,20 @@ atlas version : 1.1.0
 cassandra version : 3.11.3
 
 zookeeper version : 3.4.x
+
+Download the Source code of Apache Atlas from here [Download](http://atlas.apache.org/Downloads.html)
+
+## Build Atlas from source
+
+```sh
+tar xvfz apache-atlas-1.1.0-sources.tar.gz
+
+cd apache-atlas-sources-1.1.0/
+
+mvn clean -DskipTests install
+```
+## Packaging Apache Atlas
+```sh
+mvn clean -DskipTests package -Pdist
+```
+This will Generate tar file of Apache atlas
