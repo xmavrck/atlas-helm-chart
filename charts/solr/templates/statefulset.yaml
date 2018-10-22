@@ -32,14 +32,32 @@ spec:
       {{- end }}
     spec:
       terminationGracePeriodSeconds: {{ .Values.terminationGracePeriodSeconds }}
+      {{- if .Values.securityContext.enabled }}
+      securityContext:
+        fsGroup: {{ .Values.securityContext.fsGroup }}
+        runAsUser: {{ .Values.securityContext.runAsUser }}
+      {{- end }}
       initContainers:
         - name: {{ .Chart.Name }}-init
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
-          command: ["solr","zk","ls","/","-z","{{ .Release.Name }}-zookeeper:{{ .Values.zookeeper.ports.client.containerPort }}"]
+          command: [
+                    "/bin/bash",
+                    "-c",
+                    "solr zk ls / -z {{ .Release.Name }}-zookeeper:{{ .Values.zookeeper.ports.client.containerPort }} &&
+                     /opt/docker-solr/scripts/init-solr-home"
+                    ]
+          volumeMounts:
+          - name: data
+            mountPath: /opt/solr-home-cores/data
+            subPath: data
           env:
             - name: ZK_CLIENT_TIMEOUT
               value: "{{ .Values.zkClientTimeout }}"
+            - name: SOLR_HOME
+              value: /opt/solr-home-cores/data
+            - name: INIT_SOLR_HOME
+              value: "yes"
       containers:
         - name: {{ .Chart.Name }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
@@ -61,6 +79,10 @@ spec:
               value: "{{ .Values.heap }}"
             - name: SOLR_LOG_LEVEL
               value: "{{ .Values.logLevel }}"
+            - name: SOLR_HOME
+              value: /opt/solr-home-cores/data
+            - name: INIT_SOLR_HOME
+              value: "yes"
           ports:
             - name: solr-port
               containerPort: {{ .Values.ports.client.containerPort }}
@@ -71,7 +93,7 @@ spec:
 {{ toYaml .Values.readinessProbe | indent 12 }}
           volumeMounts:
           - name: data
-            mountPath: /opt/solr/server/data
+            mountPath: /opt/solr-home-cores/data
             subPath: data
           lifecycle:
             preStop:
