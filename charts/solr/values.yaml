@@ -33,6 +33,11 @@ readinessProbe:
   # failureThreshold: 6
   # successThreshold: 1
 
+securityContext:
+  enabled: true
+  fsGroup: 8983
+  runAsUser: 8983
+
 heap: "2g"
 timeZone: "UTC"
 logLevel: "INFO"
