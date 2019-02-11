@@ -1,7 +1,13 @@
 # atlas-helm-chart
 This chart will install the apache atlas and used solr for indexing and cassandra as backend storage.
 
-To install the chart. clone the repo and run following command to install chart
+To install the chart. clone the repo. Create Secret for users credentials
+
+```sh
+kubectl create -f secret.yaml
+```
+
+Finally, run following command to install chart
 
 ```sh
 helm install --name <any release name> -f atlas-helm-chart/values.yaml atlas-helm-chart

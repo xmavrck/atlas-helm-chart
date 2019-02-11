@@ -53,9 +53,15 @@ spec:
           volumeMounts:
           - name: atlas-config
             mountPath: /apache-atlas-1.1.0/conf/atlas-application.properties
-            subPath: atlas-application.properties            
+            subPath: atlas-application.properties
+          - name: atlas-users
+            readOnly: true
+            mountPath: "/etc/conf"
       volumes:
       - name: atlas-config
         configMap:
-          name: atlas-config               
+          name: atlas-config 
+      - name: atlas-users
+        secret:
+          secretName: atlas-zendesk-users-credentials
 

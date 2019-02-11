@@ -53,7 +53,7 @@ data:
 
     atlas.authentication.method.ldap.type=none
 
-    atlas.authentication.method.file.filename=${sys:atlas.home}/conf/users-credentials.properties
+    atlas.authentication.method.file.filename=/etc/conf/users-credentials.properties
 
 
     atlas.rest.address=http://localhost:21000
