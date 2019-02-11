@@ -32,3 +32,7 @@ mvn clean -DskipTests install
 mvn clean -DskipTests package -Pdist
 ```
 This will Generate tar file of Apache atlas
+
+## Build Docker image
+docker build -t "gcr.io/edw-dev/apache-atlas:1.1.0" .
+gcloud docker -- push gcr.io/edw-dev/apache-atlas:1.1.0
